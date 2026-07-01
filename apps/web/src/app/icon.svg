@@ -1,47 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#050505"/>
-      <stop offset="1" stop-color="#141414"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0f1a"/>
+      <stop offset="100%" stop-color="#06080f"/>
     </linearGradient>
-    
-    <radialGradient id="glowOrb" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="1"/>
-      <stop offset="50%" stop-color="#6366f1" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#c084fc" stop-opacity="0"/>
-    </radialGradient>
-    
-    <linearGradient id="ring1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8"/>
+    <linearGradient id="ray1" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="ray2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
       <stop offset="100%" stop-color="#818cf8"/>
     </linearGradient>
-    <linearGradient id="ring2" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
+    <linearGradient id="ray3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
     </linearGradient>
   </defs>
 
+  <!-- Background -->
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
 
-  <!-- Core glow -->
-  <circle cx="256" cy="256" r="160" fill="url(#glowOrb)" opacity="0.6"/>
-  <circle cx="256" cy="256" r="64" fill="url(#glowOrb)" opacity="0.9"/>
-  <circle cx="256" cy="256" r="24" fill="#ffffff"/>
+  <!-- Three abstract chevrons fanning out — "The Prism" -->
+  <!-- Each chevron is a bold angular shape representing a routed path -->
+  <!-- They share a common origin point on the left, fanning outward to the right -->
+  
+  <!-- Top chevron (cyan-blue) — fanning upward -->
+  <polygon 
+    points="152,256 280,142 312,142 340,126 196,256" 
+    fill="url(#ray1)" opacity="0.95"
+  />
+  <polygon 
+    points="196,256 340,126 372,142 312,172 180,268" 
+    fill="url(#ray1)" opacity="0.55"
+  />
 
-  <!-- Orbiting rings to represent routing pathways -->
-  <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="url(#ring1)" stroke-width="12" transform="rotate(-30 256 256)" stroke-dasharray="800" stroke-dashoffset="100" stroke-linecap="round"/>
-  <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="url(#ring2)" stroke-width="12" transform="rotate(30 256 256)" stroke-dasharray="800" stroke-dashoffset="100" stroke-linecap="round"/>
-  
-  <!-- Subtle thin tracking lines -->
-  <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="white" stroke-width="2" transform="rotate(-30 256 256)" opacity="0.2"/>
-  <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="white" stroke-width="2" transform="rotate(30 256 256)" opacity="0.2"/>
-  
-  <!-- Data nodes on the rings -->
-  <!-- Node 1 -->
-  <circle cx="118" cy="176" r="16" fill="#38bdf8" opacity="0.5"/>
-  <circle cx="118" cy="176" r="8" fill="#ffffff"/>
-  
-  <!-- Node 2 -->
-  <circle cx="394" cy="176" r="16" fill="#a855f7" opacity="0.5"/>
-  <circle cx="394" cy="176" r="8" fill="#ffffff"/>
+  <!-- Center chevron (indigo) — straight through -->
+  <polygon 
+    points="132,232 380,218 380,248 132,280" 
+    fill="url(#ray2)" opacity="0.95"
+    rx="4"
+  />
+  <polygon 
+    points="132,248 380,238 380,274 132,290" 
+    fill="url(#ray2)" opacity="0.4"
+  />
+
+  <!-- Bottom chevron (purple) — fanning downward -->
+  <polygon 
+    points="152,256 280,370 312,370 340,386 196,256" 
+    fill="url(#ray3)" opacity="0.95"
+  />
+  <polygon 
+    points="196,256 340,386 372,370 312,340 180,244" 
+    fill="url(#ray3)" opacity="0.55"
+  />
+
+  <!-- Central convergence point — bright white diamond -->
+  <rect x="128" y="236" width="40" height="40" rx="8" transform="rotate(45,148,256)" fill="white" opacity="0.95"/>
 </svg>
