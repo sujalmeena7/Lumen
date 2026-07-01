@@ -41,28 +41,37 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-[#0c0f1a] to-[#06080f] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-lg shadow-blue-500/20">
             <svg className="w-10 h-10" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Top chevron (cyan-blue) */}
-              <polygon points="152,256 280,142 312,142 340,126 196,256" fill="url(#lRay1)" opacity="0.95"/>
-              <polygon points="196,256 340,126 372,142 312,172 180,268" fill="url(#lRay1)" opacity="0.55"/>
-              {/* Center chevron (indigo) */}
-              <polygon points="132,232 380,218 380,248 132,280" fill="url(#lRay2)" opacity="0.95"/>
-              <polygon points="132,248 380,238 380,274 132,290" fill="url(#lRay2)" opacity="0.4"/>
-              {/* Bottom chevron (purple) */}
-              <polygon points="152,256 280,370 312,370 340,386 196,256" fill="url(#lRay3)" opacity="0.95"/>
-              <polygon points="196,256 340,386 372,370 312,340 180,244" fill="url(#lRay3)" opacity="0.55"/>
-              {/* Convergence point */}
-              <rect x="128" y="236" width="40" height="40" rx="8" transform="rotate(45,148,256)" fill="white" opacity="0.95"/>
               <defs>
-                <linearGradient id="lRay1" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#2563eb"/><stop offset="100%" stopColor="#38bdf8"/>
+                <radialGradient id="lGlowOrb" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="1"/>
+                  <stop offset="50%" stopColor="#6366f1" stopOpacity="0.8"/>
+                  <stop offset="100%" stopColor="#c084fc" stopOpacity="0"/>
+                </radialGradient>
+                <linearGradient id="lRing1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#38bdf8"/>
+                  <stop offset="100%" stopColor="#818cf8"/>
                 </linearGradient>
-                <linearGradient id="lRay2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#818cf8"/>
-                </linearGradient>
-                <linearGradient id="lRay3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#7c3aed"/><stop offset="100%" stopColor="#a78bfa"/>
+                <linearGradient id="lRing2" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#a855f7"/>
+                  <stop offset="100%" stopColor="#3b82f6"/>
                 </linearGradient>
               </defs>
+
+              <circle cx="256" cy="256" r="160" fill="url(#lGlowOrb)" opacity="0.6"/>
+              <circle cx="256" cy="256" r="64" fill="url(#lGlowOrb)" opacity="0.9"/>
+              <circle cx="256" cy="256" r="24" fill="#ffffff"/>
+
+              <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="url(#lRing1)" strokeWidth="16" transform="rotate(-30 256 256)" strokeDasharray="800" strokeDashoffset="100" strokeLinecap="round"/>
+              <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="url(#lRing2)" strokeWidth="16" transform="rotate(30 256 256)" strokeDasharray="800" strokeDashoffset="100" strokeLinecap="round"/>
+              
+              <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="white" strokeWidth="3" transform="rotate(-30 256 256)" opacity="0.3"/>
+              <ellipse cx="256" cy="256" rx="160" ry="60" fill="none" stroke="white" strokeWidth="3" transform="rotate(30 256 256)" opacity="0.3"/>
+              
+              <circle cx="118" cy="176" r="20" fill="#38bdf8" opacity="0.6"/>
+              <circle cx="118" cy="176" r="10" fill="#ffffff"/>
+              
+              <circle cx="394" cy="176" r="20" fill="#a855f7" opacity="0.6"/>
+              <circle cx="394" cy="176" r="10" fill="#ffffff"/>
             </svg>
           </div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
