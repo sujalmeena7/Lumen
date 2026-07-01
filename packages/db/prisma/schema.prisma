@@ -1,0 +1,200 @@
+// Prisma schema for the Dynamic Cost-Aware AI Router.
+// Postgres is the store of record for users, keys, encrypted provider
+// credentials, request logs (for the "Money Saved" dashboard), and spend caps.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  owner
+  admin
+  member
+}
+
+enum Provider {
+  openai
+  anthropic
+  groq
+}
+
+enum RequestStatus {
+  success
+  error
+  blocked
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+}
+
+enum SubscriptionStatus {
+  none
+  trialing
+  active
+  past_due
+  canceled
+  incomplete
+}
+
+// Sensitive action types that can require human-in-the-loop approval when a
+// workspace has `requireApprovalForSensitiveActions` enabled.
+enum SensitiveActionType {
+  credential_rotate
+  credential_delete
+  spending_cap_change
+}
+
+model User {
+  id         String            @id @default(cuid())
+  email      String            @unique
+  name       String?
+  createdAt  DateTime          @default(now())
+  members    WorkspaceMember[]
+}
+
+model Workspace {
+  id                  String               @id @default(cuid())
+  name                String
+  createdAt           DateTime             @default(now())
+  // Per-workspace routing weights (JSON: { cost, latency, quality }).
+  routingWeights      Json?
+  // When true, sensitive actions (credential rotation/deletion, spending cap
+  // changes) are held as PendingApproval rows instead of applying immediately.
+  requireApprovalForSensitiveActions Boolean @default(false)
+  // ---- Razorpay billing (Task 15) ----
+  razorpayCustomerId     String?             @unique
+  razorpaySubscriptionId String?             @unique
+  subscriptionStatus     SubscriptionStatus  @default(none)
+  members             WorkspaceMember[]
+  gatewayKeys         GatewayApiKey[]
+  providerCredentials ProviderCredential[]
+  requestLogs         RequestLog[]
+  spendingCaps        SpendingCap[]
+  pendingApprovals    PendingApproval[]
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        Role      @default(member)
+  createdAt   DateTime  @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+}
+
+// Gateway API keys are the credentials OUR customers use to call the gateway.
+// Only a SHA-256 hash is stored; the plaintext is shown once at creation time.
+model GatewayApiKey {
+  id          String    @id @default(cuid())
+  workspaceId String
+  name        String
+  keyHash     String    @unique
+  keyPrefix   String // first chars for display, e.g. "sk-rtr-abc..."
+  createdAt   DateTime  @default(now())
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+// The customer's UPSTREAM provider keys (OpenAI/Anthropic/Groq). Stored only as
+// ciphertext produced by envelope encryption. Never returned to clients or
+// models; decrypted server-side at call time.
+model ProviderCredential {
+  id             String    @id @default(cuid())
+  workspaceId    String
+  provider       Provider
+  label          String?
+  // Envelope encryption output.
+  ciphertext     String // base64 encrypted provider key
+  iv             String // base64 nonce
+  authTag        String // base64 GCM auth tag
+  encryptedDek   String // base64 data-encryption-key wrapped by the master key
+  createdAt      DateTime  @default(now())
+  rotatedAt      DateTime?
+  workspace      Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, provider])
+  @@index([workspaceId])
+}
+
+// One row per proxied request. Powers observability + the ROI dashboard.
+model RequestLog {
+  id             String        @id @default(cuid())
+  workspaceId    String
+  traceId        String
+  requestedModel String // what the client asked for (may be "auto")
+  chosenModel    String // what the router actually used
+  provider       Provider
+  promptTokens   Int           @default(0)
+  completionTokens Int         @default(0)
+  totalTokens    Int           @default(0)
+  costUsd        Float         @default(0)
+  baselineCostUsd Float        @default(0) // cost if premium baseline had served it
+  savedUsd       Float         @default(0)
+  latencyMs      Int           @default(0)
+  cacheHit       Boolean       @default(false)
+  fallbackUsed   Boolean       @default(false)
+  complexityScore Float?
+  status         RequestStatus @default(success)
+  errorMessage   String?
+  createdAt      DateTime      @default(now())
+  workspace      Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+  @@index([traceId])
+}
+
+model SpendingCap {
+  id            String    @id @default(cuid())
+  workspaceId   String
+  // Optional per-member cap; null = workspace-wide cap.
+  memberId      String?
+  monthlyLimitUsd Float
+  createdAt     DateTime  @default(now())
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, memberId])
+  @@index([workspaceId])
+}
+
+// A sensitive action awaiting human-in-the-loop approval (Task 14). Created
+// instead of applying the action immediately when the workspace has
+// `requireApprovalForSensitiveActions` enabled. `payload` holds whatever
+// parameters the action needs to be replayed once approved.
+model PendingApproval {
+  id            String          @id @default(cuid())
+  workspaceId   String
+  actionType    SensitiveActionType
+  requestedById String // WorkspaceMember.id of the requester
+  payload       Json
+  status        ApprovalStatus  @default(pending)
+  reviewedById  String? // WorkspaceMember.id of the approver/rejecter
+  reviewedAt    DateTime?
+  createdAt     DateTime        @default(now())
+  workspace     Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, status])
+}
+
+// Records processed billing webhook event ids so retried/duplicate webhook
+// deliveries (Razorpay's "at least once" delivery guarantee) are handled
+// idempotently (Task 15).
+model WebhookEvent {
+  id          String   @id // Razorpay event id (from x-razorpay-event-id, or a derived fallback)
+  type        String
+  processedAt DateTime @default(now())
+}

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0f1a"/>
+      <stop offset="100%" stop-color="#06080f"/>
+    </linearGradient>
+    <linearGradient id="ray1" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="ray2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="ray3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- Three abstract chevrons fanning out — "The Prism" -->
+  <!-- Each chevron is a bold angular shape representing a routed path -->
+  <!-- They share a common origin point on the left, fanning outward to the right -->
+  
+  <!-- Top chevron (cyan-blue) — fanning upward -->
+  <polygon 
+    points="152,256 280,142 312,142 340,126 196,256" 
+    fill="url(#ray1)" opacity="0.95"
+  />
+  <polygon 
+    points="196,256 340,126 372,142 312,172 180,268" 
+    fill="url(#ray1)" opacity="0.55"
+  />
+
+  <!-- Center chevron (indigo) — straight through -->
+  <polygon 
+    points="132,232 380,218 380,248 132,280" 
+    fill="url(#ray2)" opacity="0.95"
+    rx="4"
+  />
+  <polygon 
+    points="132,248 380,238 380,274 132,290" 
+    fill="url(#ray2)" opacity="0.4"
+  />
+
+  <!-- Bottom chevron (purple) — fanning downward -->
+  <polygon 
+    points="152,256 280,370 312,370 340,386 196,256" 
+    fill="url(#ray3)" opacity="0.95"
+  />
+  <polygon 
+    points="196,256 340,386 372,370 312,340 180,244" 
+    fill="url(#ray3)" opacity="0.55"
+  />
+
+  <!-- Central convergence point — bright white diamond -->
+  <rect x="128" y="236" width="40" height="40" rx="8" transform="rotate(45,148,256)" fill="white" opacity="0.95"/>
+</svg>

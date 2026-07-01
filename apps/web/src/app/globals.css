@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-900: #040814;
+  --color-navy-800: #0a0f1d;
+  --color-navy-700: #131b2f;
+  --color-accent-blue: #3b82f6;
+  --color-accent-light: #60a5fa;
+  --color-accent-purple: #8b5cf6;
+  
+  --font-sans: 'Inter', sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: var(--color-navy-900);
+    --foreground: #f8fafc;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Premium animated radial gradient */
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%),
+      radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.1), transparent 40%);
+    background-size: 200% 200%;
+    background-attachment: fixed;
+    animation: gradientShift 15s ease infinite alternate;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.37)] rounded-2xl relative overflow-hidden;
+  }
+  
+  .glass-panel::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent pointer-events-none;
+  }
+  
+  .glass-input {
+    @apply bg-black/40 border border-white/10 rounded-xl focus:border-blue-500/80 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 outline-none px-4 py-2.5 text-white placeholder-white/30 backdrop-blur-md;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-300 focus:ring-4 focus:ring-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] disabled:opacity-50 disabled:cursor-not-allowed border border-white/10;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-300 focus:ring-4 focus:ring-white/10 border border-white/10 hover:border-white/20 backdrop-blur-sm;
+  }
+  
+  .btn-danger {
+    @apply bg-red-500/10 hover:bg-red-500/20 text-red-400 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 border border-red-500/30 hover:border-red-500/50 focus:ring-4 focus:ring-red-500/20;
+  }
+}
