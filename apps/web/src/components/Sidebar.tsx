@@ -29,7 +29,7 @@ export default function Sidebar() {
       <div className="p-6 border-b border-white/5">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-10 h-10 bg-gradient-to-br from-[#0c0f1a] to-[#06080f] rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 border border-white/10">
-            <svg className="w-7 h-7" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-6 h-6" viewBox="110 110 290 290" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Top chevron (cyan-blue) */}
               <polygon points="152,256 280,142 312,142 340,126 196,256" fill="url(#sRay1)" opacity="0.95"/>
               <polygon points="196,256 340,126 372,142 312,172 180,268" fill="url(#sRay1)" opacity="0.55"/>

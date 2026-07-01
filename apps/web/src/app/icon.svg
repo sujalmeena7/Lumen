@@ -1,9 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="110 110 290 290">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0c0f1a"/>
-      <stop offset="100%" stop-color="#06080f"/>
-    </linearGradient>
     <linearGradient id="ray1" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#2563eb"/>
       <stop offset="100%" stop-color="#38bdf8"/>
@@ -17,11 +13,6 @@
       <stop offset="100%" stop-color="#a78bfa"/>
     </linearGradient>
   </defs>
-
-  <!-- Background -->
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-
-  <!-- Three abstract chevrons fanning out — "The Prism" -->
   <!-- Each chevron is a bold angular shape representing a routed path -->
   <!-- They share a common origin point on the left, fanning outward to the right -->
   
